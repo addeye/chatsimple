@@ -31,7 +31,7 @@
         ws.addEventListener("close", event => {
             console.log("Websocket connection closed");
         });
-        
+
         ws.onmessage = function (message) {
             const msgDiv = document.createElement('div');
             const typingStatus = document.getElementById('typingStatus');
@@ -41,33 +41,33 @@
                 reader = new FileReader();
                 reader.onload = () => {
                     console.log(reader.result);
-                    if(reader.result == "typing"){
-                        if(!isTyping){
+                    if (reader.result == "typing") {
+                        if (!isTyping) {
                             typingStatus.innerText = 'typing...';
-                        }else{
+                        } else {
                             typingStatus.innerText = '';
                         }
-                        
-                    }else{  
+
+                    } else {
                         msgDiv.innerHTML = reader.result;
                         document.getElementById('messages').appendChild(msgDiv);
                         typingStatus.innerText = '';
                         // Tampilkan notifikasi saat pesan baru diterima
-                        showNotification('New Message', reader.result);
+                        // showNotification('New Message', reader.result);
                     }
-                    
+
                 };
                 reader.readAsText(message.data);
             } else {
-                console.log("Result2: " + message.data);
+                // console.log("Result2: " + message.data);
                 msgDiv.innerHTML = message.data;
                 document.getElementById('messages').appendChild(msgDiv);
             }
-    }
+        }
 
         const form = document.getElementById('msgForm');
         const inputBox = document.getElementById('inputBox');
-        
+
 
         inputBox.addEventListener('input', (event) => {
             ws.send("typing");
@@ -77,6 +77,9 @@
         form.addEventListener('submit', (event) => {
             event.preventDefault();
             const message = document.getElementById('inputBox').value;
+            if (message == '') {
+                return
+            }
             isTyping = false;
             ws.send(message);
             document.getElementById('inputBox').value = ''
@@ -96,6 +99,10 @@
                     }
                 });
             }
+        }
+
+        function showOnline(){
+            
         }
     </script>
 </body>
